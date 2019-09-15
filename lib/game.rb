@@ -17,8 +17,8 @@ class Game
 
   def create_players
     players = []
-    player1 = Player.new("Player 1", "white")
-    player2 = Player.new("Player 2", "black")
+    player1 = Player.new("Player 1", board)
+    player2 = Player.new("Player 2", board)
     players.push(player1, player2)
     players
   end

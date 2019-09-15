@@ -5,9 +5,9 @@ require_relative "game"
 class Piece
   attr_accessor :player, :color
 
-  def initialize(player, color)
+  def initialize(player)
     @player = player
-    @color = color
+    @color = player.color
   end
 
   def play_piece(target_cell)
@@ -28,7 +28,7 @@ end
 class Pawn < Piece
   attr_reader :symbol
 
-  def initialize(player, color)
+  def initialize(player)
     super
     @symbol = generate_symbol
   end
@@ -45,7 +45,7 @@ end
 class Knight < Piece
   attr_reader :symbol
 
-  def initialize(player, color)
+  def initialize(player)
     super
     @symbol = generate_symbol
   end
@@ -62,7 +62,7 @@ end
 class Bishop < Piece
   attr_reader :symbol
 
-  def initialize(player, color)
+  def initialize(player)
     super
     @symbol = generate_symbol
   end
@@ -79,7 +79,7 @@ end
 class Rook < Piece
   attr_reader :symbol
 
-  def initialize(player, color)
+  def initialize(player)
     super
     @symbol = generate_symbol
   end
@@ -96,7 +96,7 @@ end
 class Queen < Piece
   attr_reader :symbol
 
-  def initialize(player, color)
+  def initialize(player)
     super
     @symbol = generate_symbol
   end
@@ -113,7 +113,7 @@ end
 class King < Piece
   attr_reader :symbol
 
-  def initialize(player, color)
+  def initialize(player)
     super
     @symbol = generate_symbol
   end

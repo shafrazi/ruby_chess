@@ -25,22 +25,22 @@ class Player
     pieces = []
     i = 0
     while i < 8
-      pawn = Pawn.new(self.name, self.color)
+      pawn = Pawn.new(self)
       pieces << pawn
       i += 1
     end
 
     i = 0
     while i < 2
-      knight = Knight.new(self.name, self.color)
-      bishop = Bishop.new(self.name, self.color)
-      rook = Rook.new(self.name, self.color)
+      knight = Knight.new(self)
+      bishop = Bishop.new(self)
+      rook = Rook.new(self)
       pieces.push(knight, bishop, rook)
       i += 1
     end
 
-    king = King.new(self.name, self.color)
-    queen = Queen.new(self.name, self.color)
+    king = King.new(self)
+    queen = Queen.new(self)
     pieces.push(king, queen)
     pieces
   end
