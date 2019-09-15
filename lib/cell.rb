@@ -4,9 +4,16 @@ class Cell
   def initialize(x, y)
     @x = x
     @y = y
-    @player = false
+    @player = nil
     @occupied = false
     @value = "   "
     @piece = nil
+  end
+
+  def update_cell(piece)
+    self.player = piece.player
+    self.occupied = true
+    self.value = " #{piece.symbol} "
+    self.piece = piece
   end
 end

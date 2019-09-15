@@ -59,7 +59,9 @@ class Board
     end
     all_cells
   end
-end
 
-board = Board.new
-board.display_board
+  def find_piece_at_cell(cell)
+    piece = cell.piece
+    piece
+  end
+end
