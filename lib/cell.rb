@@ -1,5 +1,6 @@
 class Cell
-  attr_accessor :x, :y, :player, :occupied, :value, :piece
+  attr_accessor :x, :y, :player, :occupied, :value, :piece, :id
+  @@cell_id = 0
 
   def initialize(x, y)
     @x = x
@@ -8,6 +9,8 @@ class Cell
     @occupied = false
     @value = "   "
     @piece = nil
+    @@cell_id += 1
+    @id = @@cell_id
   end
 
   def update_cell(piece)

@@ -64,4 +64,10 @@ class Board
     piece = cell.piece
     piece
   end
+
+  def find_cell_from_location(location_array)
+    x = location_array[0]
+    y = location_array[1]
+    target_cell = cells[y][x]
+  end
 end

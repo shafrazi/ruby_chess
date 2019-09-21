@@ -11,4 +11,11 @@ describe Board do
       expect(board.find_piece_at_cell(target_cell)).to eql(piece)
     end
   end
+
+  describe "#find_cell_from_location" do
+    it "sholud return the corresponding cell when the coordinates are given" do
+      target_cell = board.cells[1][3]
+      expect(board.find_cell_from_location([3, 1])).to eql(target_cell)
+    end
+  end
 end
