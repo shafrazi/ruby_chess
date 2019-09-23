@@ -1,23 +1,27 @@
 require_relative "cell"
 require_relative "board"
 require_relative "game"
+require_relative "valid_cells"
 
 class Piece
-  attr_accessor :player, :color
+  attr_accessor :player, :color, :current_cell
 
   def initialize(player)
     @player = player
     @color = player.color
+    @current_cell = nil
   end
 
   def play_piece(target_cell)
     if !target_cell.occupied
       target_cell.update_cell(self)
+      current_cell = target_cell
     else
       if target_cell.player != self.player
         opponent = target_cell.player
         opponent.terminate_piece(target_cell)
         target_cell.update_cell(self)
+        current_cell = target_cell
       else
         return false
       end
@@ -138,49 +142,13 @@ class Bishop < Piece
   end
 
   def valid_moves(current_cell)
-    x = current_cell.x
-    y = current_cell.y
     board = self.player.board
-    valid_locations = []
-
-    # upward right
-    while x < 7 && y < 7
-      x += 1
-      y += 1
-      valid_locations << [x, y]
-    end
-
-    # downward right
-    x = current_cell.x
-    y = current_cell.y
-    while x < 7 && y > 0
-      x += 1
-      y -= 1
-      valid_locations << [x, y]
-    end
-
-    # upward left
-    x = current_cell.x
-    y = current_cell.y
-    while x > 0 && y < 7
-      x -= 1
-      y += 1
-      valid_locations << [x, y]
-    end
-
-    # upward left
-    x = current_cell.x
-    y = current_cell.y
-    while x > 0 && y > 0
-      x -= 1
-      y -= 1
-      valid_locations << [x, y]
-    end
-    valid_cells = valid_locations.map { |location| board.find_cell_from_location(location) }
+    valid_cells = diagonal(current_cell, board)
   end
 end
 
 class Rook < Piece
+  include ValidCells
   attr_reader :symbol
 
   def initialize(player)
@@ -197,46 +165,13 @@ class Rook < Piece
   end
 
   def valid_moves(current_cell)
-    x = current_cell.x
-    y = current_cell.y
     board = self.player.board
-    valid_locations = []
-
-    # horizontal left
-    while x > 0
-      x -= 1
-      valid_locations << [x, y]
-    end
-
-    # horizontal right
-    x = current_cell.x
-    y = current_cell.y
-    while x < 7
-      x += 1
-      valid_locations << [x, y]
-    end
-
-    # vertical up
-    x = current_cell.x
-    y = current_cell.y
-    while y < 7
-      y += 1
-      valid_locations << [x, y]
-    end
-    
-    # vertical down
-    x = current_cell.x
-    y = current_cell.y
-    while y > 0
-      y -= 1
-      valid_locations << [x, y]
-    end
-    
-    valid_cells = valid_locations.map { |location| board.find_cell_from_location(location) }
+    valid_cells = horizontal_vertical(current_cell, board)
   end
 end
 
 class Queen < Piece
+  include ValidCells
   attr_reader :symbol
 
   def initialize(player)
@@ -253,76 +188,8 @@ class Queen < Piece
   end
 
   def valid_moves(current_cell)
-    x = current_cell.x
-    y = current_cell.y
     board = self.player.board
-    valid_locations = []
-
-    # horizontal left
-    while x > 0
-      x -= 1
-      valid_locations << [x, y]
-    end
-
-    # horizontal right
-    x = current_cell.x
-    y = current_cell.y
-    while x < 7
-      x += 1
-      valid_locations << [x, y]
-    end
-
-    # vertical up
-    x = current_cell.x
-    y = current_cell.y
-    while y < 7
-      y += 1
-      valid_locations << [x, y]
-    end
-
-    # vertical down
-    x = current_cell.x
-    y = current_cell.y
-    while y > 0
-      y -= 1
-      valid_locations << [x, y]
-    end
-
-    # upward right
-    while x < 7 && y < 7
-      x += 1
-      y += 1
-      valid_locations << [x, y]
-    end
-
-    # downward right
-    x = current_cell.x
-    y = current_cell.y
-    while x < 7 && y > 0
-      x += 1
-      y -= 1
-      valid_locations << [x, y]
-    end
-
-    # upward left
-    x = current_cell.x
-    y = current_cell.y
-    while x > 0 && y < 7
-      x -= 1
-      y += 1
-      valid_locations << [x, y]
-    end
-
-    # upward left
-    x = current_cell.x
-    y = current_cell.y
-    while x > 0 && y > 0
-      x -= 1
-      y -= 1
-      valid_locations << [x, y]
-    end
-
-    valid_cells = valid_locations.map { |location| board.find_cell_from_location(location) }
+    valid_cells = diagonal(current_cell, board) + horizontal_vertical(current_cell, board)
   end
 end
 
@@ -361,6 +228,18 @@ class King < Piece
     valid_locations << [x, y-1] if y >= 1
     valid_locations << [x+1, y-1] if x <= 6 && y >= 1
     valid_cells = valid_locations.map {|location| board.find_cell_from_location(location)}
+  end
+
+  def check_for_check(target_cell, opponent)
+    opponent.pieces.each do |piece|
+      opponent_moves = piece.valid_moves(piece.current_cell)
+      if opponent_moves.include?(target_cell)
+        puts "You cannot move your King to the specified location, you will be checked!"
+        return true
+      else
+        return false
+      end
+    end
   end
 end
 

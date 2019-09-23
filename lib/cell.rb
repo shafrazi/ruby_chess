@@ -19,4 +19,8 @@ class Cell
     self.value = " #{piece.symbol} "
     self.piece = piece
   end
+
+  def to_s
+    "x: #{@x}, y: #{@y}"
+  end
 end

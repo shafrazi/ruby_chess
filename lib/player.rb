@@ -49,4 +49,8 @@ class Player
     occupied_piece = board.find_piece_at_cell(current_cell)
     self.pieces.delete_if { |piece| piece == occupied_piece }
   end
+
+  def to_s
+    "name: #{@name}"
+  end
 end
