@@ -54,7 +54,7 @@ class Board
     all_cells = []
     self.cells.each do |row|
       row.each do |cell|
-        all_cells << cells
+        all_cells << cell
       end
     end
     all_cells
@@ -69,5 +69,10 @@ class Board
     x = location_array[0]
     y = location_array[1]
     target_cell = cells[y][x]
+  end
+
+  def all_pieces
+    occupied_cells = all_cells.select { |cell| cell.occupied }
+    all_pieces = occupied_cells.map { |cell| cell.piece }
   end
 end

@@ -4,13 +4,14 @@ require_relative "piece"
 
 class Player
   attr_reader :name, :board
-  attr_accessor :color, :pieces
+  attr_accessor :color, :pieces, :active
 
   def initialize(name, board)
     @name = name
     @color = define_color
     @board = board
     @pieces = generate_pieces
+    @active = false
   end
 
   def define_color

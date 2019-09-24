@@ -15,17 +15,21 @@ class Piece
   def play_piece(target_cell)
     if !target_cell.occupied
       target_cell.update_cell(self)
-      current_cell = target_cell
+      self.current_cell = target_cell
     else
       if target_cell.player != self.player
         opponent = target_cell.player
         opponent.terminate_piece(target_cell)
         target_cell.update_cell(self)
-        current_cell = target_cell
+        self.current_cell = target_cell
       else
         return false
       end
     end
+  end
+
+  def to_s
+    "Player: #{player.name} | Class: #{self.class} | Current cell: #{current_cell}"
   end
 end
 
@@ -126,6 +130,7 @@ class Knight < Piece
 end
 
 class Bishop < Piece
+  include ValidCells
   attr_reader :symbol
 
   def initialize(player)
@@ -230,14 +235,33 @@ class King < Piece
     valid_cells = valid_locations.map {|location| board.find_cell_from_location(location)}
   end
 
-  def check_for_check(target_cell, opponent)
-    opponent.pieces.each do |piece|
+  def check_for_check(target_cell)
+    board = self.player.board
+    opponent_pieces = board.all_pieces.select {|piece| piece.player != self.player}
+    opponent_pieces.each do |piece|
       opponent_moves = piece.valid_moves(piece.current_cell)
       if opponent_moves.include?(target_cell)
-        puts "You cannot move your King to the specified location, you will be checked!"
+        puts "You can't move to the specified cell, you will be checked!"
         return true
+      end
+    end
+    return false
+  end
+
+  def play_piece(target_cell)
+    if !check_for_check(target_cell)
+      if !target_cell.occupied
+        target_cell.update_cell(self)
+        self.current_cell = target_cell
       else
-        return false
+        if target_cell.player != self.player
+          opponent = target_cell.player
+          opponent.terminate_piece(target_cell)
+          target_cell.update_cell(self)
+          self.current_cell = target_cell
+        else
+          return false
+        end
       end
     end
   end

@@ -5,13 +5,14 @@ require_relative "piece"
 
 class Game
   attr_reader :players, :board
-  attr_accessor :game_complete, :game_won
+  attr_accessor :game_complete, :game_won, :check_status
 
   def initialize
     @board = Board.new
     @players = create_players
     @game_complete = false
     @game_won = false
+    @check_status = false
     initial_setup
   end
 
@@ -25,6 +26,7 @@ class Game
 
   def initial_setup
     player1 = players[0]
+    player1.active = true
     player1_first_row = board.cells[1]
     player1_second_row = board.cells[0]
     player1_pawns = player1.pieces.select { |piece| piece.class == Pawn }
@@ -75,6 +77,45 @@ class Game
         player2_queen.shift.play_piece(cell)
       elsif index == 4
         player2_king.shift.play_piece(cell)
+      end
+    end
+  end
+
+  def active_player
+    active_player = nil
+    players.each { |player| active_player = player if player.active }
+    active_player
+  end
+
+  def switch_player
+    player1 = players[0]
+    player2 = players[1]
+    if player1.active
+      player2.active = true
+      player1.active = false
+    else
+      player1.active = true
+      player2.active = false
+    end
+  end
+
+  def get_opponent
+    opponent = nil
+    players.each { |player| opponent = player if !player.active }
+    opponent
+  end
+
+  def checking(current_cell)
+    current_player = active_player
+    opponent = get_opponent
+    checking_piece = current_cell.piece
+    opponent_king = board.all_pieces.find { |piece| piece.player == opponent && piece.class == King }
+    checking_piece_moves = checking_piece.valid_moves(current_cell)
+
+    checking_piece_moves.each do |cell|
+      if cell.piece == opponent_king
+        self.check_status = true
+        puts "#{opponent.name} has been checked by #{current_player.name}!"
       end
     end
   end
