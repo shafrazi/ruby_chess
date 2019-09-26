@@ -14,6 +14,7 @@ class Piece
 
   def play_piece(target_cell)
     if !target_cell.occupied
+      self.current_cell.piece = nil if self.current_cell
       target_cell.update_cell(self)
       self.current_cell = target_cell
     else
@@ -75,7 +76,6 @@ class Pawn < Piece
     end
 
     possible_cells = possible_moves.map { |location| board.find_cell_from_location(location) }
-    possible_cells
   end
 end
 

@@ -119,4 +119,51 @@ class Game
       end
     end
   end
+
+  def play_game
+  end
+
+  def check_mate?
+    check_mate = true
+    active_player_king = active_player.pieces.find { |piece| piece.class == King }
+    king_valid_moves = active_player_king.valid_moves(active_player_king.current_cell)
+    opponent = get_opponent
+
+    king_valid_moves.each do |cell|
+      if active_player_king.check_for_check(cell) == false
+        check_mate = false
+      end
+    end
+    check_mate
+  end
+
+  def get_possible_threats(opponent, cell)
+    possible_threats = []
+    opponent_pieces = opponent.pieces
+    opponent_pieces.each do |piece|
+      if piece.valid_moves(piece.current_cell).include?(cell)
+        possible_threats << piece
+      end
+    end
+    possible_threats
+  end
+
+  def possible_evasions?(possible_threats)
+    possible_evasions = false
+    active_player_moves = active_player.pieces.map { |piece| piece.valid_moves(piece.current_cell) }.flatten
+    possible_threat_locations = possible_threats.map { |piece| piece.current_cell }
+    active_player_moves.each do |cell|
+      if possible_threat_locations.include?(cell)
+        possible_evasions = true
+      end
+    end
+
+    threat_moves = possible_threats.map { |piece| piece.valid_moves(piece.current_cell) }
+    active_player_moves.each do |cell|
+      if threat_moves.include?(cell)
+        possible_evasions = true
+      end
+    end
+    possible_evasions
+  end
 end

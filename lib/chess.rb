@@ -24,4 +24,10 @@ board.display_board
 # king = cell.piece
 # p king.play_piece(target_cell)
 
-puts game.checking(cell)
+king = board.cells[0][4].piece
+target_cell = board.cells[2][4]
+king.play_piece(target_cell)
+board.display_board
+puts king.current_cell.piece
+# p board.cells[0][4].piece.class
+# p board.all_pieces.length
