@@ -158,12 +158,12 @@ class Game
       end
     end
 
-    threat_moves = possible_threats.map { |piece| piece.valid_moves(piece.current_cell) }
-    active_player_moves.each do |cell|
-      if threat_moves.include?(cell)
-        possible_evasions = true
-      end
-    end
+    # threat_moves = possible_threats.map { |piece| piece.valid_moves(piece.current_cell) }
+    # active_player_moves.each do |cell|
+    #   if threat_moves.include?(cell)
+    #     possible_evasions = true
+    #   end
+    # end
     possible_evasions
   end
 end

@@ -1,16 +1,21 @@
 class Cell
-  attr_accessor :x, :y, :player, :occupied, :value, :piece, :id
-  @@cell_id = 0
+  attr_accessor :x, :y, :player, :occupied, :value, :piece
 
   def initialize(x, y)
     @x = x
     @y = y
     @player = nil
     @occupied = false
-    @value = "   "
+    @value = update_cell_value
     @piece = nil
-    @@cell_id += 1
-    @id = @@cell_id
+  end
+
+  def update_cell_value
+    if piece
+      value = " #{piece.symbol} "
+    else
+      value = "   "
+    end
   end
 
   def update_cell(piece)
@@ -20,7 +25,14 @@ class Cell
     self.piece = piece
   end
 
+  def vacate_cell
+    self.player = nil
+    self.occupied = false
+    self.value = "   "
+    self.piece = nil
+  end
+
   def to_s
-    "x: #{@x}, y: #{@y}"
+    "x: #{@x}, y: #{@y} | value: #{@value}"
   end
 end

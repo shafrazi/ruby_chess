@@ -14,11 +14,12 @@ class Piece
 
   def play_piece(target_cell)
     if !target_cell.occupied
-      self.current_cell.piece = nil if self.current_cell
+      self.current_cell.vacate_cell if self.current_cell
       target_cell.update_cell(self)
       self.current_cell = target_cell
     else
       if target_cell.player != self.player
+        self.current_cell.vacate_cell if self.current_cell
         opponent = target_cell.player
         opponent.terminate_piece(target_cell)
         target_cell.update_cell(self)
@@ -251,10 +252,12 @@ class King < Piece
   def play_piece(target_cell)
     if !check_for_check(target_cell)
       if !target_cell.occupied
+        self.current_cell.vacate_cell if self.current_cell
         target_cell.update_cell(self)
         self.current_cell = target_cell
       else
         if target_cell.player != self.player
+          self.current_cell.vacate_cell if self.current_cell
           opponent = target_cell.player
           opponent.terminate_piece(target_cell)
           target_cell.update_cell(self)

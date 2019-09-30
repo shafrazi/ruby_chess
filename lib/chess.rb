@@ -18,16 +18,9 @@ board = game.board
 cell = board.cells[0][4]
 player1 = game.players[0]
 board.display_board
-# target_cell = board.cells[5][2]
-# pawn_cell = board.cells[1][5]
-# pawn = pawn_cell.piece
-# king = cell.piece
-# p king.play_piece(target_cell)
-
-king = board.cells[0][4].piece
-target_cell = board.cells[2][4]
-king.play_piece(target_cell)
-board.display_board
-puts king.current_cell.piece
-# p board.cells[0][4].piece.class
+puts cell
+# king = board.cells[0][4].piece
+# target_cell = board.cells[2][4]
+# king.play_piece(target_cell)
+# board.display_board
 # p board.all_pieces.length
