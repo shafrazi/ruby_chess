@@ -25,7 +25,7 @@ describe Knight do
     it "should return the correct possible cells which are valid" do
       player1_knight = board.cells[0][1].piece
       cell = board.cells[0][0]
-      possible_cells = [board.find_cell_from_location([2, 1]), board.find_cell_from_location([1, 2])]
+      possible_cells = [board.find_cell_from_location([1, 2])]
       expect(player1_knight.valid_moves(cell)).to eql(possible_cells)
     end
   end

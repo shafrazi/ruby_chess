@@ -6,7 +6,7 @@ require_relative "valid_cells"
 class Piece
   attr_accessor :player, :color, :current_cell
 
-  def initialize(player)
+  def initialize(player) 
     @player = player
     @color = player.color
     @current_cell = nil
@@ -28,6 +28,16 @@ class Piece
         return false
       end
     end
+  end
+
+  def self_occupy_validator(possible_cells)
+    valid_cells = []
+    possible_cells.each do |cell|
+      if (cell.occupied && cell.player != self.player) || !cell.occupied
+        valid_cells << cell
+      end
+    end
+    valid_cells
   end
 
   def to_s
@@ -76,7 +86,8 @@ class Pawn < Piece
       end
     end
 
-    possible_cells = possible_moves.map { |location| board.find_cell_from_location(location) }
+    valid_cells = possible_moves.map { |location| board.find_cell_from_location(location) }
+    self_occupy_validator(valid_cells)
   end
 end
 
@@ -104,6 +115,7 @@ class Knight < Piece
     new_array = array[0].product(array[1])
     new_array = new_array.select { |arr| (arr[0] + arr[1]).odd? }
     valid_cells = new_array.map { |location| board.find_cell_from_location(location) }
+    self_occupy_validator(valid_cells)
   end
 
   def change_cells(x, y)
@@ -150,6 +162,7 @@ class Bishop < Piece
   def valid_moves(current_cell)
     board = self.player.board
     valid_cells = diagonal(current_cell, board)
+    self_occupy_validator(valid_cells)
   end
 end
 
@@ -173,6 +186,7 @@ class Rook < Piece
   def valid_moves(current_cell)
     board = self.player.board
     valid_cells = horizontal_vertical(current_cell, board)
+    self_occupy_validator(valid_cells)
   end
 end
 
@@ -196,6 +210,7 @@ class Queen < Piece
   def valid_moves(current_cell)
     board = self.player.board
     valid_cells = diagonal(current_cell, board) + horizontal_vertical(current_cell, board)
+    self_occupy_validator(valid_cells)
   end
 end
 
@@ -234,6 +249,7 @@ class King < Piece
     valid_locations << [x, y-1] if y >= 1
     valid_locations << [x+1, y-1] if x <= 6 && y >= 1
     valid_cells = valid_locations.map {|location| board.find_cell_from_location(location)}
+    self_occupy_validator(valid_cells)
   end
 
   def check_for_check(target_cell)
@@ -242,7 +258,7 @@ class King < Piece
     opponent_pieces.each do |piece|
       opponent_moves = piece.valid_moves(piece.current_cell)
       if opponent_moves.include?(target_cell)
-        puts "You can't move to the specified cell, you will be checked!"
+        # puts "You can't move to the specified cell, you will be checked!"
         return true
       end
     end

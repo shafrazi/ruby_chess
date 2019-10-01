@@ -17,10 +17,10 @@ game = Game.new
 board = game.board
 cell = board.cells[0][4]
 player1 = game.players[0]
+king1 = player1.pieces.find { |piece| piece.class == King }
+
 board.display_board
-puts cell
-# king = board.cells[0][4].piece
-# target_cell = board.cells[2][4]
-# king.play_piece(target_cell)
-# board.display_board
-# p board.all_pieces.length
+target_cell = board.cells[5][4]
+king1.play_piece(target_cell)
+pawn = board.cells[1][4].piece
+puts pawn.valid_moves(pawn.current_cell)
