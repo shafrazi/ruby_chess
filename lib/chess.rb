@@ -15,12 +15,8 @@ require_relative "player"
 
 game = Game.new
 board = game.board
-cell = board.cells[0][4]
+cell = board.cells[2][4]
 player1 = game.players[0]
 king1 = player1.pieces.find { |piece| piece.class == King }
 
-board.display_board
-target_cell = board.cells[5][4]
-king1.play_piece(target_cell)
-pawn = board.cells[1][4].piece
-puts pawn.valid_moves(pawn.current_cell)
+puts king1.valid_moves(cell)

@@ -4,6 +4,7 @@ describe Game do
   game = Game.new
   player1 = game.players[0]
   player2 = game.players[1]
+  player1.active = true
   board = game.board
   king1 = player1.pieces.find { |piece| piece.class == King }
   bishop2_1 = player2.pieces.find_all { |piece| piece.class == Bishop }[0]
@@ -67,9 +68,8 @@ describe Game do
     it "should return false if zero evasion methods are present" do
       queen2.play_piece(board.cells[4][4])
       king_location = king1.current_cell
-      possible_threats = game.get_possible_threats(player2, king_location)
       board.display_board
-      expect(game.possible_evasions?(possible_threats)).to eql(false)
+      expect(game.check_mate?).to eql(true)
     end
   end
 end

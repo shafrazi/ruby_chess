@@ -124,17 +124,34 @@ class Game
   end
 
   def check_mate?
-    check_mate = true
     active_player_king = active_player.pieces.find { |piece| piece.class == King }
-    king_valid_moves = active_player_king.valid_moves(active_player_king.current_cell)
+    active_player_pieces = active_player.pieces
     opponent = get_opponent
+    current_cell = active_player_king.current_cell
+    check_mate = true
 
-    king_valid_moves.each do |cell|
-      if active_player_king.check_for_check(cell) == false
-        check_mate = false
+    if active_player_king.check_for_check(current_cell)
+      active_player_king.valid_moves(current_cell).each do |cell|
+        if active_player_king.check_for_check(cell) == false
+          check_mate = false
+        end
+      end
+
+      active_player_pieces.each do |piece|
+        piece.valid_moves(piece.current_cell).each do |cell|
+          initial_cell = cell
+          cell.piece = piece
+          if active_player_king.check_for_check(current_cell) == false
+            check_mate = false
+          end
+          cell = initial_cell
+        end
       end
     end
     check_mate
+  end
+
+  def soft_play(piece, target_cell)
   end
 
   def get_possible_threats(opponent, cell)

@@ -29,34 +29,19 @@ describe Knight do
       expect(player1_knight.valid_moves(cell)).to eql(possible_cells)
     end
   end
+  
+  describe '#check_for_check' do
+    game = Game.new
+    player1 = game.players[0]
+    player2 = game.players[1]
+    board = game.board
+    king1 = player1.pieces.find { |piece| piece.class == King }
+    rook2_1 = player2.pieces.find_all { |piece| piece.class == Rook }[0]
 
-  describe "#valid_moves" do
-    # it "should return the correct possible cells which are valid" do
-    #   player1_knight = board.cells[0][1].piece
-    #   cell = board.cells[3][3]
-    #   possible_cells = [[2, 1], [4, 1], [5, 2], [1, 2], [1, 4], [2, 5], [4, 5], [5, 4]].map {|arr| board.find_cell_from_location(arr)}.sort_by {|cell| cell.id}
-    #   returned_cells = player1_knight.valid_moves(cell).sort_by {|cell| cell.id}
-    #   expect(returned_cells).to eql(possible_cells)
-    # end
-
-    # it "should return the correct possible cells which are valid" do
-    #   player1_knight = board.cells[0][1].piece
-    #   cell = board.cells[0][2]
-    #   possible_cells = [[4, 1], [0, 1], [3, 2], [1, 2]].map {|arr| board.find_cell_from_location(arr)}
-    #   returned_cells = player1_knight.valid_moves(cell)
-    #   p cell.id
-    #   def check_match(arr1, arr2)
-    #     matched = false
-    #     arr1.each do |i|
-    #       arr2.each do |j|
-    #         if i == j
-    #           matched = true
-    #         end
-    #       end
-    #     end
-    #     matched && arr1.length == arr2.length
-    #   end
-    #   expect(check_match(possible_cells, returned_cells)).to eql(true)
-    # end
+    it 'should return true if king is being checked' do
+      king1.play_piece(board.cells[2][5])
+      rook2_1.play_piece(board.cells[2][2])
+      expect(king1.check_for_check(king1.current_cell)).to eql(true)
+    end
   end
 end
