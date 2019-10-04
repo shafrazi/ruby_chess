@@ -5,7 +5,7 @@ require_relative "piece"
 
 class Game
   attr_reader :players, :board
-  attr_accessor :game_complete, :game_won, :check_status
+  attr_accessor :game_complete, :game_won, :check_status, :check_mate
 
   def initialize
     @board = Board.new
@@ -13,6 +13,7 @@ class Game
     @game_complete = false
     @game_won = false
     @check_status = false
+    @check_mate = false
     initial_setup
   end
 
@@ -121,6 +122,51 @@ class Game
   end
 
   def play_game
+    while !check_mate
+      board.display_board
+      puts "#{active_player.name} enter the location of the piece you wish to move:"
+      piece = get_piece
+      puts "You have chosen #{piece}"
+      puts "Enter target location:"
+      target_cell = get_cell
+      piece.play_piece(target_cell)
+      checking(target_cell)
+      switch_player
+      puts "Game over! #{active_player.name} has encountered a checkmate" if check_mate?
+    end
+    board.display_board
+  end
+
+  def get_piece
+    piece_location = gets.chomp
+    piece_location = convert_input(piece_location)
+    piece = board.find_piece_at_cell(board.find_cell_from_location(piece_location))
+    if piece == nil || piece.player != active_player
+      puts "Invalid piece selected! Please retry."
+      get_piece
+    else
+      piece
+    end
+  end
+
+  def get_cell
+    target_cell = gets.chomp
+    target_cell = board.find_cell_from_location(convert_input(target_cell))
+    if target_cell == false
+      puts "Invalid cell selected. Please retry."
+      get_cell
+    else
+      target_cell
+    end
+  end
+
+  def convert_input(string)
+    string = string.downcase
+    row = ("a".."h").to_a
+    column = (1..8).to_a
+    x = row.index(string[0])
+    y = column.index(string[1].to_i)
+    [x, y]
   end
 
   def check_mate?
@@ -128,14 +174,21 @@ class Game
     active_player_pieces = active_player.pieces
     opponent = get_opponent
     current_cell = active_player_king.current_cell
-    check_mate = true
+    check_mate = false
 
     if active_player_king.check_for_check(current_cell)
-      active_player_king.valid_moves(current_cell).each do |cell|
+      check_mate = true
+      valid_moves = active_player_king.valid_moves(current_cell)
+      initial_cell = current_cell # preserve the initial state of the current cell
+      current_cell.piece = nil
+      current_cell.occupied = false
+      valid_moves.each do |cell|
         if active_player_king.check_for_check(cell) == false
           check_mate = false
         end
       end
+
+      current_cell = initial_cell # revert back to original state
 
       active_player_pieces.each do |piece|
         piece.valid_moves(piece.current_cell).each do |cell|
@@ -149,9 +202,7 @@ class Game
       end
     end
     check_mate
-  end
-
-  def soft_play(piece, target_cell)
+    @check_mate = check_mate
   end
 
   def get_possible_threats(opponent, cell)
@@ -174,13 +225,6 @@ class Game
         possible_evasions = true
       end
     end
-
-    # threat_moves = possible_threats.map { |piece| piece.valid_moves(piece.current_cell) }
-    # active_player_moves.each do |cell|
-    #   if threat_moves.include?(cell)
-    #     possible_evasions = true
-    #   end
-    # end
     possible_evasions
   end
 end

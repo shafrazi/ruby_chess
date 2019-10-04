@@ -14,9 +14,5 @@ require_relative "player"
 # if the subject piece is king and the intended move will result a check on it, notify that the move cannot be made and prompt for a new cell
 
 game = Game.new
-board = game.board
-cell = board.cells[2][4]
-player1 = game.players[0]
-king1 = player1.pieces.find { |piece| piece.class == King }
-
-puts king1.valid_moves(cell)
+game.play_game
+# puts game.get_piece

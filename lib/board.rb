@@ -12,8 +12,8 @@ class Board
   end
 
   def display_board
-    column_names = ["   ", " 0 ", " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", "   "]
-    row_names = [" 7 ", " 6 ", " 5 ", " 4 ", " 3 ", " 2 ", " 1 ", " 0 "]
+    column_names = ["   ", " a ", " b ", " c ", " d ", " e ", " f ", " g ", " h ", "   "]
+    row_names = [" 8 ", " 7 ", " 6 ", " 5 ", " 4 ", " 3 ", " 2 ", " 1 "]
     puts "    "
     puts column_names.join("|")
     puts border
@@ -69,6 +69,11 @@ class Board
     x = location_array[0]
     y = location_array[1]
     target_cell = cells[y][x]
+    if all_cells.include?(target_cell)
+      target_cell
+    else
+      false
+    end
   end
 
   def all_pieces

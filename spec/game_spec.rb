@@ -54,22 +54,24 @@ describe Game do
     end
   end
 
-  describe "#possible_evasions?" do
-    it "should return true if there is at least 1 evasion method present" do
+  describe "#check_mate?" do
+    it "should return true if check mate occurs" do
       bishop2_1.play_piece(board.cells[4][2])
       bishop2_2.play_piece(board.cells[4][6])
       rook2_1.play_piece(board.cells[2][2])
-      king_location = king1.current_cell
-      possible_threats = game.get_possible_threats(player2, king_location)
-
-      expect(game.possible_evasions?(possible_threats)).to eql(true)
-    end
-
-    it "should return false if zero evasion methods are present" do
       queen2.play_piece(board.cells[4][4])
-      king_location = king1.current_cell
       board.display_board
       expect(game.check_mate?).to eql(true)
+    end
+
+    it "should return false if check mate has not occurred" do
+      rook2_1.play_piece(board.cells[3][2])
+      expect(game.check_mate?).to eql(false)
+    end
+
+    it "should return false if checked and king can evade by capturing an opponent piece" do
+      rook2_1.play_piece(board.cells[3][3])
+      expect(game.check_mate?).to eql(false)
     end
   end
 end
