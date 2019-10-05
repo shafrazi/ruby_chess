@@ -129,12 +129,20 @@ class Game
       puts "You have chosen #{piece}"
       puts "Enter target location:"
       target_cell = get_cell
-      piece.play_piece(target_cell)
-      checking(target_cell)
+      move_piece(piece, target_cell)
+      # checking(target_cell)
       switch_player
       puts "Game over! #{active_player.name} has encountered a checkmate" if check_mate?
     end
     board.display_board
+  end
+
+  def move_piece(piece, target_cell)
+    if !piece.move_piece(piece.current_cell, target_cell)
+      puts "Invalid move. Please select another cell to move piece:"
+      target_cell = get_cell
+      move_piece(piece, target_cell)
+    end
   end
 
   def get_piece

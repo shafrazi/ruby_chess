@@ -30,6 +30,14 @@ class Piece
     end
   end
 
+  def move_piece(current_cell, target_cell)
+    if valid_moves(current_cell).include?(target_cell)
+      play_piece(target_cell)
+    else
+      false
+    end
+  end
+
   def self_occupy_validator(possible_cells)
     valid_cells = []
     possible_cells.each do |cell|
@@ -52,7 +60,7 @@ class Pawn < Piece
   def initialize(player)
     super
     @symbol = generate_symbol
-    @first_move_completed = true
+    @first_move_completed = false
   end
 
   def generate_symbol
@@ -60,6 +68,24 @@ class Pawn < Piece
       "♟"
     else
       "♙"
+    end
+  end
+
+  def play_piece(target_cell)
+    if !target_cell.occupied
+      self.current_cell.vacate_cell if self.current_cell
+      target_cell.update_cell(self)
+      self.current_cell = target_cell
+    else
+      if target_cell.player != self.player
+        self.current_cell.vacate_cell if self.current_cell
+        opponent = target_cell.player
+        opponent.terminate_piece(target_cell)
+        target_cell.update_cell(self)
+        self.current_cell = target_cell
+      else
+        return false
+      end
     end
   end
 
@@ -71,23 +97,54 @@ class Pawn < Piece
     if first_move_completed
       if self.player.name == "Player 1"
         possible_moves << [x, y + 1]
-        possible_moves << [x - 1, y + 1] if x > 0
-        possible_moves << [x + 1, y + 1] if x < 7
+        diagonal_left = [x - 1, y + 1] if x > 0
+        capture_validator(diagonal_left, possible_moves) if diagonal_left
+        diagonal_right = [x + 1, y + 1] if x < 7
+        capture_validator(diagonal_right, possible_moves) if diagonal_right
       else
         possible_moves << [x, y - 1]
-        possible_moves << [x - 1, y - 1] if x > 0
-        possible_moves << [x + 1, y - 1] if x < 7
+        diagonal_left = [x - 1, y - 1] if x > 0
+        capture_validator(diagonal_left, possible_moves) if diagonal_left
+        diagonal_right = [x + 1, y - 1] if x < 7
+        capture_validator(diagonal_right, possible_moves) if diagonal_right
       end
     else
       if self.player.name == "Player 1"
         possible_moves << [x, y + 2]
+        possible_moves << [x, y + 1]
+        diagonal_left = [x - 1, y + 1] if x > 0
+        capture_validator(diagonal_left, possible_moves) if diagonal_left
+        diagonal_right = [x + 1, y + 1] if x < 7
+        capture_validator(diagonal_right, possible_moves) if diagonal_right
       else
         possible_moves << [x, y - 2]
+        possible_moves << [x, y - 1]
+        diagonal_left = [x - 1, y - 1] if x > 0
+        capture_validator(diagonal_left, possible_moves) if diagonal_left
+        diagonal_right = [x + 1, y - 1] if x < 7
+        capture_validator(diagonal_right, possible_moves) if diagonal_right
       end
     end
 
     valid_cells = possible_moves.map { |location| board.find_cell_from_location(location) }
     self_occupy_validator(valid_cells)
+  end
+
+  def move_piece(current_cell, target_cell)
+    if valid_moves(current_cell).include?(target_cell)
+      play_piece(target_cell)
+      self.first_move_completed = true
+    else
+      false
+    end
+  end
+
+  def capture_validator(cell_location, possible_moves_array)
+    board = self.player.board
+    cell = board.find_cell_from_location(cell_location)
+    if cell.occupied && cell.player != self.player
+      possible_moves_array << cell_location
+    end
   end
 end
 
