@@ -60,7 +60,7 @@ describe Game do
       bishop2_2.play_piece(board.cells[4][6])
       rook2_1.play_piece(board.cells[2][2])
       queen2.play_piece(board.cells[4][4])
-      board.display_board
+      # board.display_board
       expect(game.check_mate?).to eql(true)
     end
 
