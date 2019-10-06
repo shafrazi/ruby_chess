@@ -142,6 +142,8 @@ class Game
       puts "Invalid move. Please select another cell to move piece:"
       target_cell = get_cell
       move_piece(piece, target_cell)
+    else
+      piece.move_piece(piece.current_cell, target_cell)
     end
   end
 
