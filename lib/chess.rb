@@ -38,11 +38,10 @@ def get_cell(string, game)
 end
 
 knight1 = board.find_cell_from_location(game.convert_input("g8")).piece
-puts knight1.valid_moves(knight1.current_cell)
-pawn = board.find_cell_from_location(game.convert_input("f7")).piece
-pawn.play_piece(get_cell("f5", game))
-board.display_board
-puts knight1.current_cell
 # puts knight1.valid_moves(knight1.current_cell)
-# knight1.move_piece(knight1.current_cell, get_cell("f7", game))
+# pawn = board.find_cell_from_location(game.convert_input("f7")).piece
+# pawn.play_piece(get_cell("f5", game))
 # board.display_board
+# puts knight1.current_cell
+board.display_board
+puts knight1.valid_moves(get_cell("f3", game))
