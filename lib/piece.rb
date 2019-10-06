@@ -170,7 +170,11 @@ class Knight < Piece
     board = self.player.board
     array = change_cells(x, y)
     new_array = array[0].product(array[1])
-    new_array = new_array.select { |arr| (arr[0] + arr[1]).odd? }
+    if (x+y).even? || (x+y) == 0
+      new_array = new_array.select { |arr| (arr[0] + arr[1]).odd? }
+    else
+      new_array = new_array.select { |arr| (arr[0] + arr[1]).even? }
+    end
     valid_cells = new_array.map { |location| board.find_cell_from_location(location) }
     self_occupy_validator(valid_cells)
   end
