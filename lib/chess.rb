@@ -14,7 +14,8 @@ require_relative "player"
 # if the subject piece is king and the intended move will result a check on it, notify that the move cannot be made and prompt for a new cell
 
 game = Game.new
-game.play_game
+board = game.board
+# game.play_game
 # puts game.get_piece
 # board = game.board
 # pawn = board.all_pieces.select { |piece| piece.class == Pawn }[3]
@@ -22,3 +23,26 @@ game.play_game
 # cell = board.cells[1][0]
 # opponent_queen.play_piece(board.cells[2][1])
 # puts pawn.valid_moves(cell)
+
+def get_piece(string, game)
+  board = game.board
+  cell_location = game.convert_input(string)
+  cell = board.find_cell_from_location(cell_location)
+  piece = cell.piece
+end
+
+def get_cell(string, game)
+  board = game.board
+  cell_location = game.convert_input(string)
+  cell = board.find_cell_from_location(cell_location)
+end
+
+knight1 = board.find_cell_from_location(game.convert_input("g8")).piece
+puts knight1.valid_moves(knight1.current_cell)
+pawn = board.find_cell_from_location(game.convert_input("f7")).piece
+pawn.play_piece(get_cell("f5", game))
+board.display_board
+puts knight1.current_cell
+# puts knight1.valid_moves(knight1.current_cell)
+# knight1.move_piece(knight1.current_cell, get_cell("f7", game))
+# board.display_board

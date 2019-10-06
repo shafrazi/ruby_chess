@@ -71,7 +71,23 @@ describe Game do
 
     it "should return false if checked and king can evade by capturing an opponent piece" do
       rook2_1.play_piece(board.cells[3][3])
-      expect(game.check_mate?).to eql(false)
+      expect(game.check_mate).to eql(false)
+    end
+  end
+
+  describe "#check_mate?" do
+    it "should return true if check mate occurs" do
+      game = Game.new
+      board = game.board
+      player1 = game.players[0]
+      player2 = game.players[1]
+      queen1 = player1.pieces.find { |piece| piece.class == Queen }
+      pawn1 = board.find_cell_from_location(game.convert_input("e2")).piece
+      pawn2 = board.find_cell_from_location(game.convert_input("f7")).piece
+      game.move_piece(pawn1, board.find_cell_from_location(game.convert_input("e3")))
+      game.move_piece(pawn2, board.find_cell_from_location(game.convert_input("f6")))
+      game.move_piece(queen1, board.find_cell_from_location(game.convert_input("h5")))
+      expect(game.check_mate?).to eql(true)
     end
   end
 end

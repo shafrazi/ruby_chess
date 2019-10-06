@@ -32,7 +32,15 @@ class Cell
     self.piece = nil
   end
 
+  def convert_location(x, y)
+    row = ("a".."h").to_a
+    column = (1..8).to_a
+    x = row[x]
+    y = column[y]
+    "#{x}#{y}"
+  end
+
   def to_s
-    "x: #{@x}, y: #{@y} | value: #{@value}"
+    "#{convert_location(x, y)} | x: #{@x}, y: #{@y} | value: #{@value}"
   end
 end

@@ -184,17 +184,17 @@ class Game
     active_player_pieces = active_player.pieces
     opponent = get_opponent
     current_cell = active_player_king.current_cell
-    check_mate = false
+    check_mate_status = false
 
     if active_player_king.check_for_check(current_cell)
-      check_mate = true
+      check_mate_status = true
       valid_moves = active_player_king.valid_moves(current_cell)
       initial_cell = current_cell # preserve the initial state of the current cell
       current_cell.piece = nil
       current_cell.occupied = false
       valid_moves.each do |cell|
         if active_player_king.check_for_check(cell) == false
-          check_mate = false
+          check_mate_status = false
         end
       end
 
@@ -205,14 +205,14 @@ class Game
           initial_cell = cell
           cell.piece = piece
           if active_player_king.check_for_check(current_cell) == false
-            check_mate = false
+            check_mate_status = false
           end
           cell = initial_cell
         end
       end
     end
-    check_mate
-    @check_mate = check_mate
+    check_mate_status
+    @check_mate = check_mate_status
   end
 
   def get_possible_threats(opponent, cell)
