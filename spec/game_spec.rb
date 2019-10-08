@@ -87,6 +87,7 @@ describe Game do
       game.move_piece(pawn1, board.find_cell_from_location(game.convert_input("e3")))
       game.move_piece(pawn2, board.find_cell_from_location(game.convert_input("f6")))
       game.move_piece(queen1, board.find_cell_from_location(game.convert_input("h5")))
+      board.display_board
       expect(game.check_mate?).to eql(true)
     end
   end

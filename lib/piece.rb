@@ -96,13 +96,15 @@ class Pawn < Piece
     possible_moves = []
     if first_move_completed
       if self.player.name == "Player 1"
-        possible_moves << [x, y + 1]
+        cell_location = [x, y + 1]
+        possible_moves << cell_location if !board.find_cell_from_location(cell_location).occupied
         diagonal_left = [x - 1, y + 1] if x > 0
         capture_validator(diagonal_left, possible_moves) if diagonal_left
         diagonal_right = [x + 1, y + 1] if x < 7
         capture_validator(diagonal_right, possible_moves) if diagonal_right
       else
-        possible_moves << [x, y - 1]
+        cell_location = [x, y - 1]
+        possible_moves << cell_location if !board.find_cell_from_location(cell_location).occupied
         diagonal_left = [x - 1, y - 1] if x > 0
         capture_validator(diagonal_left, possible_moves) if diagonal_left
         diagonal_right = [x + 1, y - 1] if x < 7
@@ -110,15 +112,15 @@ class Pawn < Piece
       end
     else
       if self.player.name == "Player 1"
-        possible_moves << [x, y + 2]
-        possible_moves << [x, y + 1]
+        possible_moves << [x, y + 2] if !board.find_cell_from_location([x, y + 2]).occupied
+        possible_moves << [x, y + 1] if !board.find_cell_from_location([x, y + 1]).occupied
         diagonal_left = [x - 1, y + 1] if x > 0
         capture_validator(diagonal_left, possible_moves) if diagonal_left
         diagonal_right = [x + 1, y + 1] if x < 7
         capture_validator(diagonal_right, possible_moves) if diagonal_right
       else
-        possible_moves << [x, y - 2]
-        possible_moves << [x, y - 1]
+        possible_moves << [x, y - 2] if !board.find_cell_from_location([x, y - 2]).occupied
+        possible_moves << [x, y - 1] if !board.find_cell_from_location([x, y - 1]).occupied
         diagonal_left = [x - 1, y - 1] if x > 0
         capture_validator(diagonal_left, possible_moves) if diagonal_left
         diagonal_right = [x + 1, y - 1] if x < 7
