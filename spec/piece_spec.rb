@@ -142,8 +142,8 @@ describe Pawn do
   puts pawn2
   describe '#valid_moves' do
     it 'should return valid moves on start of game' do
-      possible_cells = [get_cell("e6", game), get_cell("e5", game)].sort
-      expect(pawn2.valid_moves(pawn2.current_cell).sort).to eql(possible_cells)
+      possible_cells = [get_cell("e5", game), get_cell("e6", game)]
+      expect(pawn2.valid_moves(pawn2.current_cell)).to eql(possible_cells)
     end
 
     it 'should return the valid number of moves when given a from a specifc location' do
