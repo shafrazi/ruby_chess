@@ -151,7 +151,7 @@ class Game
     piece_location = gets.chomp
     piece_location = convert_input(piece_location)
     piece = board.find_piece_at_cell(board.find_cell_from_location(piece_location))
-    if piece == nil || piece.player != active_player
+    if piece == nil || piece.player != self.active_player
       puts "Invalid piece selected! Please retry."
       get_piece
     else

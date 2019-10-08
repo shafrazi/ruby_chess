@@ -72,6 +72,7 @@ describe Queen do
   player1 = game.players[0]
   player2 = game.players[1]
   queen2 = player2.pieces.find {|piece| piece.class == Queen}
+  queen1 = player1.pieces.find {|piece| piece.class == Queen}
 
   describe '#valid_moves' do
     it 'should return zero valid moves on start of game' do
@@ -81,6 +82,25 @@ describe Queen do
     it 'should return the valid number of moves when given a from a specifc location' do
       queen2.play_piece(get_cell("a6", game))
       expect(queen2.valid_moves(queen2.current_cell).length).to eql(15)
+    end
+  end
+
+  describe '#move_piece' do
+    it 'should return the correct cell information' do
+      queen1.play_piece(get_cell("f3", game))
+      target_cell = get_cell("h5", game)
+      queen1.move_piece(queen1.current_cell, target_cell)
+      expect(target_cell.occupied).to eql(true)
+      expect(target_cell.player.name).to eql("Player 1")
+      expect(target_cell.piece).to eql(queen1)
+    end
+
+    it 'should return the correct cell information when opponent piece is captured' do
+      target_cell = get_cell("f7", game)
+      queen1.move_piece(queen1.current_cell, target_cell)
+      expect(target_cell.occupied).to eql(true)
+      expect(target_cell.player.name).to eql("Player 1")
+      expect(target_cell.piece).to eql(queen1)
     end
   end
 end

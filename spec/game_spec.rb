@@ -81,6 +81,7 @@ describe Game do
       board = game.board
       player1 = game.players[0]
       player2 = game.players[1]
+      player2.active = true
       queen1 = player1.pieces.find { |piece| piece.class == Queen }
       pawn1 = board.find_cell_from_location(game.convert_input("e2")).piece
       pawn2 = board.find_cell_from_location(game.convert_input("f7")).piece
