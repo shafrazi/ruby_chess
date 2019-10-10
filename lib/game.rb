@@ -179,6 +179,17 @@ class Game
     [x, y]
   end
 
+  def copy_cell_info(source_cell)
+    target_cell = Cell.new(source_cell.x, source_cell.y)
+    i = 0
+    while i < source_cell.instance_variables.length
+      property = source_cell.instance_variables[i]
+      target_cell.instance_variable_set(property, source_cell.instance_variable_get(property))
+      i += 1
+    end
+    target_cell
+  end
+
   def check_mate?
     active_player_king = active_player.pieces.find { |piece| piece.class == King }
     active_player_pieces = active_player.pieces
