@@ -279,10 +279,12 @@ end
 
 class King < Piece
   attr_reader :symbol
+  attr_accessor :check_status
 
   def initialize(player)
     super
     @symbol = generate_symbol
+    @check_status = false
   end
 
   def generate_symbol
@@ -322,9 +324,11 @@ class King < Piece
       opponent_moves = piece.valid_moves(piece.current_cell)
       if opponent_moves.include?(target_cell)
         # puts "You can't move to the specified cell, you will be checked!"
+        self.check_status = true
         return true
       end
     end
+    self.check_status = false
     return false
   end
 
