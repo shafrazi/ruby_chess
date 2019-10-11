@@ -127,6 +127,22 @@ describe King do
       expect(king2.valid_moves(king2.current_cell).length).to eql(8)
     end
   end
+
+  describe 'check_status' do
+    it 'check status of king should return true if checked' do
+      game = Game.new
+      board = game.board
+      player1 = game.players[0]
+      player2 = game.players[1]
+      king2 = player2.pieces.find {|piece| piece.class == King}
+      queen1 = player1.pieces.find { |piece| piece.class == Queen }
+      pawn1 = get_piece("e2", game)
+      king2.play_piece(get_cell("h5", game))
+      game.move_piece(pawn1, get_cell("e3", game))
+      king2.check_for_check(get_cell("h5", game))
+      expect(king2.check_status).to eql(true)
+    end
+  end
 end
 
 describe Bishop do
