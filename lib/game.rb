@@ -210,15 +210,19 @@ class Game
       end
 
       current_cell = initial_cell # revert back to original state
+      current_cell.piece = active_player_king
+      current_cell.occupied = true
 
       active_player_pieces.each do |piece|
         piece.valid_moves(piece.current_cell).each do |cell|
+          initial_piece = cell.piece
           initial_cell = cell
           cell.piece = piece
           if active_player_king.check_for_check(current_cell) == false
             check_mate_status = false
           end
           cell = initial_cell
+          cell.piece = initial_piece
         end
       end
     end

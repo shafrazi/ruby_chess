@@ -41,6 +41,6 @@ class Cell
   end
 
   def to_s
-    "#{convert_location(x, y)} | x: #{@x}, y: #{@y} | value: #{@value}"
+    "#{convert_location(x, y)} | x: #{@x}, y: #{@y} | value: #{@value} | piece: #{@piece.class} | player: #{@player.name} | occupied: #{@occupied}"
   end
 end
