@@ -1,5 +1,17 @@
 require "./lib/game"
 
+def get_cell(string, game)
+  location = game.convert_input(string)
+  board = game.board
+  board.find_cell_from_location(location)
+end
+
+def get_piece(string, game)
+  cell = get_cell(string, game)
+  board = game.board
+  board.find_piece_at_cell(cell)
+end
+
 describe Game do
   game = Game.new
   player1 = game.players[0]
@@ -91,6 +103,22 @@ describe Game do
       game.move_piece(queen1, board.find_cell_from_location(game.convert_input("h5")))
       board.display_board
       expect(game.check_mate?).to eql(true)
+    end
+  end
+
+  describe "#move_piece" do
+    it "should return an error if King is moved to a cell where it will be checked" do
+      game = Game.new
+      board = game.board
+      player1 = game.players[0]
+      player2 = game.players[1]
+      player2.active = true
+      king2 = player2.pieces.find { |piece| piece.class == King }
+      queen1 = player1.pieces.find { |piece| piece.class == Queen }
+      pawn1 = get_piece("e2", game)
+      game.move_piece(pawn1, get_cell("e3", game))
+      king2.play_piece(get_cell("g6", game))
+      expect(king2.move_piece(king2.current_cell, get_cell("h5", game))).to eql(false)
     end
   end
 end

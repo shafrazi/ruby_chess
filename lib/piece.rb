@@ -345,6 +345,8 @@ class King < Piece
           return false
         end
       end
+    else
+      return false
     end
   end
 end
