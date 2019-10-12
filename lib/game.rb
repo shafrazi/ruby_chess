@@ -124,17 +124,67 @@ class Game
   def play_game
     while !check_mate
       board.display_board
-      puts "#{active_player.name} enter the location of the piece you wish to move:"
-      piece = get_piece
-      puts "You have chosen #{piece}"
-      puts "Enter target location:"
-      target_cell = get_cell
-      move_piece(piece, target_cell)
-      # checking(target_cell)
+      array = input_getter
+      move_piece(array[0], array[1])
       switch_player
       puts "Game over! #{active_player.name} has encountered a checkmate" if check_mate?
     end
     board.display_board
+  end
+
+  def is_checked?
+    is_checked = false
+    kings = board.all_pieces.select { |piece| piece.class == King }
+    kings.each do |king|
+      king.check_for_check(king.current_cell)
+      if king.check_status
+        is_checked = true
+        puts "#{king.player.name} has been checked!"
+      end
+    end
+    is_checked
+  end
+
+  def check_sequence(player, piece, target_cell)
+    valid_move = true
+    target_cell_initial_piece = target_cell.piece
+    piece_current_cell = piece.current_cell
+
+    king = player.pieces.find { |piece| piece.class == King }
+    if king.check_for_check(king.current_cell)
+      puts "#{player.name} has been checked!"
+    end
+    if piece == king
+      valid_move = true
+    else
+      # piece_current_cell.piece = nil
+      target_cell.piece = piece
+      target_cell.occupied = true
+      king.check_for_check(king.current_cell)
+
+      if king.check_status
+        valid_move = false
+      end
+
+      # revert to original state of cells
+      target_cell.piece = target_cell_initial_piece
+      piece.current_cell = piece_current_cell
+      target_cell.occupied = false if !target_cell.piece
+    end
+    valid_move
+  end
+
+  def input_getter
+    puts "#{active_player.name} enter the location of the piece you wish to move:"
+    piece = get_piece
+    puts "You have chosen #{piece}"
+    puts "Enter target location:"
+    target_cell = get_cell
+    if check_sequence(active_player, piece, target_cell) == false
+      input_getter
+    else
+      [piece, target_cell]
+    end
   end
 
   def move_piece(piece, target_cell)
@@ -177,17 +227,6 @@ class Game
     x = row.index(string[0])
     y = column.index(string[1].to_i)
     [x, y]
-  end
-
-  def copy_cell_info(source_cell)
-    target_cell = Cell.new(source_cell.x, source_cell.y)
-    i = 0
-    while i < source_cell.instance_variables.length
-      property = source_cell.instance_variables[i]
-      target_cell.instance_variable_set(property, source_cell.instance_variable_get(property))
-      i += 1
-    end
-    target_cell
   end
 
   def check_mate?
