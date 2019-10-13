@@ -6,7 +6,7 @@ require_relative "valid_cells"
 class Piece
   attr_accessor :player, :color, :current_cell
 
-  def initialize(player) 
+  def initialize(player)
     @player = player
     @color = player.color
     @current_cell = nil
@@ -49,7 +49,7 @@ class Piece
   end
 
   def to_s
-    "Player: #{player.name} | Class: #{self.class} | Current cell: #{current_cell}"
+    "Player: #{player.name} | Class: #{self.class}"
   end
 end
 
@@ -172,7 +172,7 @@ class Knight < Piece
     board = self.player.board
     array = change_cells(x, y)
     new_array = array[0].product(array[1])
-    if (x+y).even? || (x+y) == 0
+    if (x + y).even? || (x + y) == 0
       new_array = new_array.select { |arr| (arr[0] + arr[1]).odd? }
     else
       new_array = new_array.select { |arr| (arr[0] + arr[1]).even? }
@@ -302,24 +302,24 @@ class King < Piece
     valid_locations = []
 
     # horizontal right
-    valid_locations << [x+1, y] if x <= 6
-    valid_locations << [x+1, y+1] if x <= 6 && y <= 6
+    valid_locations << [x + 1, y] if x <= 6
+    valid_locations << [x + 1, y + 1] if x <= 6 && y <= 6
     # horizontal left
-    valid_locations << [x-1, y] if x >= 1
-    valid_locations << [x-1, y+1] if x >= 1 && y <= 6
+    valid_locations << [x - 1, y] if x >= 1
+    valid_locations << [x - 1, y + 1] if x >= 1 && y <= 6
     # upward
-    valid_locations << [x, y+1] if y <= 6
-    valid_locations << [x-1, y-1] if x >= 1 && y >= 1
+    valid_locations << [x, y + 1] if y <= 6
+    valid_locations << [x - 1, y - 1] if x >= 1 && y >= 1
     # downward
-    valid_locations << [x, y-1] if y >= 1
-    valid_locations << [x+1, y-1] if x <= 6 && y >= 1
-    valid_cells = valid_locations.map {|location| board.find_cell_from_location(location)}
+    valid_locations << [x, y - 1] if y >= 1
+    valid_locations << [x + 1, y - 1] if x <= 6 && y >= 1
+    valid_cells = valid_locations.map { |location| board.find_cell_from_location(location) }
     self_occupy_validator(valid_cells)
   end
 
   def check_for_check(target_cell)
     board = self.player.board
-    opponent_pieces = board.all_pieces.select {|piece| piece.player != self.player}
+    opponent_pieces = board.all_pieces.select { |piece| piece.player != self.player }
     opponent_pieces.each do |piece|
       opponent_moves = piece.valid_moves(piece.current_cell)
       if opponent_moves.include?(target_cell)
@@ -354,6 +354,3 @@ class King < Piece
     end
   end
 end
-
-
-
