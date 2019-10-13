@@ -151,9 +151,7 @@ class Game
     piece_current_cell = piece.current_cell
 
     king = player.pieces.find { |piece| piece.class == King }
-    if king.check_for_check(king.current_cell)
-      puts "#{player.name} has been checked!"
-    end
+
     if piece == king
       valid_move = true
     else
@@ -164,6 +162,7 @@ class Game
 
       if king.check_status
         valid_move = false
+        puts "Choose another move to evade check!"
       end
 
       # revert to original state of cells
@@ -175,6 +174,7 @@ class Game
   end
 
   def input_getter
+    is_checked?
     puts "#{active_player.name} enter the location of the piece you wish to move:"
     piece = get_piece
     puts "You have chosen #{piece}"
