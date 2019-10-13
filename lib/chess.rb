@@ -15,18 +15,4 @@ require_relative "helper"
 # if the subject piece is king and the intended move will result a check on it, notify that the move cannot be made and prompt for a new cell
 
 game = Game.new
-board = game.board
 game.play_game
-# player1 = game.players[0]
-# king = get_piece("e1", game)
-# queen2 = get_piece("d8", game)
-# pawn = get_piece("e2", game)
-
-# king.play_piece(get_cell("d4", game))
-# p king.check_for_check(king.current_cell)
-
-# queen2.play_piece(get_cell("f6", game))
-# board.display_board
-# p king.check_for_check(king.current_cell)
-# p game.check_sequence(player1, pawn, get_cell("e5", game))
-# board.display_board

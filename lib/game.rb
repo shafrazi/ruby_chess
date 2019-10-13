@@ -106,21 +106,6 @@ class Game
     opponent
   end
 
-  def checking(current_cell)
-    current_player = active_player
-    opponent = get_opponent
-    checking_piece = current_cell.piece
-    opponent_king = board.all_pieces.find { |piece| piece.player == opponent && piece.class == King }
-    checking_piece_moves = checking_piece.valid_moves(current_cell)
-
-    checking_piece_moves.each do |cell|
-      if cell.piece == opponent_king
-        self.check_status = true
-        puts "#{opponent.name} has been checked by #{current_player.name}!"
-      end
-    end
-  end
-
   def play_game
     while !check_mate
       board.display_board
